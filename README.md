@@ -1,3 +1,5 @@
+<img src="build/icon.png" alt="Ícone do PlanNote" width="112">
+
 # PlanNote
 
 Caderno digital para Mac e Windows. Organize suas anotações em cadernos e folhas e acompanhe as datas das provas.

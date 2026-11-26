@@ -1,7 +1,7 @@
 {
   "name": "plannote",
   "productName": "PlanNote",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Caderno digital para Mac e Windows: cadernos, folhas e datas de provas. Seus dados ficam no seu computador.",
   "main": "electron/main.cjs",
   "type": "module",
