@@ -1,0 +1,76 @@
+{
+  "name": "plannote",
+  "productName": "PlanNote",
+  "version": "0.1.0",
+  "description": "Caderno digital para Mac e Windows: cadernos, folhas e datas de provas. Seus dados ficam no seu computador.",
+  "main": "electron/main.cjs",
+  "type": "module",
+  "license": "MIT",
+  "author": "PlanNote contributors",
+  "private": true,
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "build": "vite build",
+    "start": "vite build && electron .",
+    "test": "node --test tests/*.test.js",
+    "dist": "vite build && electron-builder",
+    "dist:mac": "vite build && electron-builder --mac",
+    "dist:win": "vite build && electron-builder --win"
+  },
+  "build": {
+    "appId": "io.github.plannote.app",
+    "productName": "PlanNote",
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "dist/**",
+      "electron/**",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.education",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
+      ],
+      "identity": "-"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "shortcutName": "PlanNote"
+    }
+  },
+  "devDependencies": {
+    "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource-variable/space-grotesk": "^5.3.0",
+    "@tiptap/core": "^2.27.3",
+    "@tiptap/extension-highlight": "^2.27.3",
+    "@tiptap/extension-placeholder": "^2.27.3",
+    "@tiptap/extension-task-item": "^2.27.3",
+    "@tiptap/extension-task-list": "^2.27.3",
+    "@tiptap/extension-underline": "^2.27.3",
+    "@tiptap/pm": "^2.27.3",
+    "@tiptap/starter-kit": "^2.27.3",
+    "electron": "^45.5.0",
+    "electron-builder": "^26.18.0",
+    "vite": "^8.3.8"
+  }
+}

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' ws://localhost:*"
+    />
+    <title>PlanNote</title>
+  </head>
+  <body>
+    <div class="app" id="app">
+      <!-- Coluna 1: cadernos -->
+      <aside class="sidebar">
+        <div class="sidebar-top drag">
+          <div class="brand"><span class="brand-dot" aria-hidden="true"></span>PlanNote</div>
+          <label class="search" id="search-wrap">
+            <input id="search" type="search" placeholder="Buscar em tudo" aria-label="Buscar em todas as folhas" autocomplete="off" />
+          </label>
+        </div>
+        <div class="sidebar-scroll">
+          <div id="nav-exams"></div>
+          <div class="section-label">
+            <span>Cadernos</span>
+            <button class="icon-btn" id="add-notebook" type="button" title="Novo caderno" aria-label="Novo caderno"></button>
+          </div>
+          <ul class="notebook-list" id="notebook-list"></ul>
+        </div>
+        <div class="sidebar-bottom">
+          <button class="nav-item" id="open-settings" type="button"></button>
+        </div>
+      </aside>
+
+      <!-- Coluna 2: folhas do caderno (ou resultados da busca) -->
+      <section class="pages-col" id="pages-col" aria-label="Folhas"></section>
+
+      <!-- Coluna 3: a folha aberta -->
+      <main class="editor-col" id="editor-col">
+        <div class="toolbar drag">
+          <div class="tools" id="tools" role="toolbar" aria-label="Formatação"></div>
+          <div class="toolbar-spacer"></div>
+          <span class="save-status" id="save-status" aria-live="polite"></span>
+        </div>
+        <div class="sheet-scroll" id="sheet-scroll">
+          <article class="sheet" id="sheet">
+            <div class="sheet-head">
+              <span class="head-num" id="sheet-num"></span>
+              <span id="sheet-date"></span>
+            </div>
+            <input class="sheet-title" id="sheet-title" type="text" placeholder="Assunto da folha" aria-label="Assunto da folha" maxlength="300" />
+            <div id="editor"></div>
+          </article>
+          <div class="sheet-foot">
+            <button class="btn btn-ghost btn-danger" id="delete-page" type="button">Excluir folha</button>
+          </div>
+        </div>
+        <div class="empty-state" id="editor-empty" hidden></div>
+      </main>
+
+      <!-- Provas: ocupa as colunas 2 e 3 -->
+      <section class="exams-view" id="exams-view" hidden>
+        <div class="exams-list-col">
+          <div class="col-header drag">
+            <div class="col-title-row">
+              <h1 class="col-title">Provas</h1>
+              <button class="btn btn-primary" id="add-exam" type="button">Nova prova</button>
+            </div>
+            <div class="col-sub" id="exams-sub"></div>
+          </div>
+          <div class="exam-list" id="exam-list"></div>
+        </div>
+        <div class="calendar-col">
+          <div class="cal-head drag">
+            <h2 id="cal-title"></h2>
+            <button class="btn" id="cal-today" type="button">Hoje</button>
+            <button class="icon-btn" id="cal-prev" type="button" title="Mês anterior" aria-label="Mês anterior"></button>
+            <button class="icon-btn" id="cal-next" type="button" title="Próximo mês" aria-label="Próximo mês"></button>
+          </div>
+          <div class="cal-grid" id="cal-grid"></div>
+          <div class="cal-hint">Clique num dia para marcar uma prova.</div>
+        </div>
+      </section>
+    </div>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

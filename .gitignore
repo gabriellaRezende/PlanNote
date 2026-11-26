@@ -1,0 +1,18 @@
+# Dependências (cada pessoa instala com npm install)
+node_modules/
+
+# Arquivos gerados
+dist/
+release/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Configurações locais do editor e do Claude Code
+.vscode/
+.claude/settings.local.json
+
+# Logs
+*.log
+npm-debug.log*
