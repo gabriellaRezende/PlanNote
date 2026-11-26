@@ -1,0 +1,85 @@
+# Gera os instaladores e publica no Releases quando uma tag de versão é enviada.
+#
+#   1. Atualize "version" no package.json (ex.: 0.2.0) e faça commit.
+#   2. git tag v0.2.0 && git push origin v0.2.0
+#
+# O .dmg é gerado num Mac e o .exe num Windows, nos servidores do GitHub.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  instalador:
+    strategy:
+      matrix:
+        include:
+          - os: macos-latest
+            alvo: --mac
+          - os: windows-latest
+            alvo: --win
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Conferir se a tag bate com a versão do package.json
+        run: |
+          VERSAO="v$(node -p "require('./package.json').version")"
+          if [ "$GITHUB_REF_NAME" != "$VERSAO" ]; then
+            echo "A tag é $GITHUB_REF_NAME, mas o package.json diz $VERSAO. Atualize um dos dois."
+            exit 1
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+
+      - name: Gerar instalador
+        run: npx electron-builder ${{ matrix.alvo }} --publish never
+        env:
+          # Sem certificado pago: o Mac recebe assinatura gratuita (ad-hoc), definida no package.json.
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: instalador-${{ matrix.os }}
+          path: |
+            release/*.dmg
+            release/*.exe
+          if-no-files-found: error
+
+  publicar:
+    needs: instalador
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: instaladores
+          merge-multiple: true
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          name: PlanNote ${{ github.ref_name }}
+          files: instaladores/*
+          body: |
+            ## Qual arquivo baixar
+
+            | Computador | Arquivo |
+            |---|---|
+            | Mac com chip Apple (M1, M2, M3, M4…) | `PlanNote-…-mac-arm64.dmg` |
+            | Mac com processador Intel | `PlanNote-…-mac-x64.dmg` |
+            | Windows | `PlanNote-…-windows-setup.exe` |
+
+            Na primeira vez que abrir, o sistema mostra um aviso porque o app não tem certificado pago. Veja no [README](https://github.com/${{ github.repository }}#instalar) como liberar: é só uma vez.
